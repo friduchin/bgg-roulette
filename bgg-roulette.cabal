@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 280060d24ee957075e43fb1fc9f88f6ef29e01ed34f8fc5377c138c47caa1877
+-- hash: 2128504f3936c026055949e7c3dec403f9a4f3267ef1b6ccbfd6aa2219f2fc97
 
 name:           bgg-roulette
 version:        0.1.0.0
@@ -27,14 +27,20 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      Bgg
+    , GamesCollection
   other-modules:
       Paths_bgg_roulette
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5
+    , bytestring
+    , http-conduit
+    , xml
+    , random
   default-language: Haskell2010
+  extensions: OverloadedStrings
 
 executable bgg-roulette-exe
   main-is: Main.hs
@@ -46,6 +52,8 @@ executable bgg-roulette-exe
   build-depends:
       base >=4.7 && <5
     , bgg-roulette
+    , bytestring
+    , http-conduit
   default-language: Haskell2010
 
 test-suite bgg-roulette-test
