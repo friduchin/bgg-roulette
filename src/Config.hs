@@ -14,6 +14,7 @@ getConfigValue name = loadFile defaultConfig >>= (return . f)
 -- names must be same as in .env file
 data ConfigName = User 
                 | Filename
+                | Port
     deriving Show
 
 configTranslator :: ConfigName -> String

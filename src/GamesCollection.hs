@@ -11,12 +11,11 @@ import Data.Maybe (fromMaybe)
 import Config
 import Data.Either (fromRight)
 
-parsing :: IO ()
+parsing :: IO String
 parsing = do
     collectionData <- getConfigValue Filename >>= B.readFile . fromRight ""
     let gamesList = getGamesList collectionData
-    game <- getRandomGame gamesList
-    print game
+    getRandomGame gamesList
 
 getGamesList :: XmlSource s => s -> [String]
 getGamesList collectionData = fmap strContent names where

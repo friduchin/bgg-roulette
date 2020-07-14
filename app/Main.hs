@@ -8,10 +8,19 @@ import GamesCollection
 import Control.Monad
 import Config
 import Data.Either
+import Web.Scotty
+import Data.Monoid (mconcat)
+import Data.Text.Lazy
+import Control.Monad.Trans
 
 
 main :: IO ()
-main = GamesCollection.parsing
+main = do
+    port <- getConfigValue Port
+    scotty (read (fromRight "3000" port) :: Int) 
+        $ get "/randomgame" $ do
+            game <- lift parsing
+            html $ pack game
 
 
 main2 :: IO ()
@@ -23,7 +32,7 @@ doRequest (Left msg) = print msg
 doRequest (Right username) = do
     response <- httpLBS $ getCollectionRequest $ BC.pack username
     result <- storeCollection response
-    when result GamesCollection.parsing
+    print result
 
 
 storeCollection :: Response L.ByteString -> IO Bool
