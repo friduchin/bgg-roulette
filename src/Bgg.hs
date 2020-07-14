@@ -1,4 +1,4 @@
-module Bgg where
+module Bgg (getCollectionRequest) where
 -- bgg API wrapper
 
 import Network.HTTP.Simple
