@@ -21,14 +21,16 @@ oneDay :: Integer
 oneDay = 24 * 60 * 60
 
 
-getCollectionFilename :: IO String
-getCollectionFilename = head . filter (isPrefixOf "collection") <$> listDirectory "collection"
+getCollectionFilename :: IO (Maybe String)
+getCollectionFilename = find (isPrefixOf "collection") <$> listDirectory "collection"
 
 
 getTimestamp :: IO Integer
 getTimestamp = do
     fileName <- getCollectionFilename
-    return $ read $ head $ splitOn "." $ head $ tail $ splitOn "_" fileName
+    case fileName of
+        Nothing -> return 0
+        Just name -> return $ read $ head $ splitOn "." $ head $ tail $ splitOn "_" name
 
 
 needUpdate :: IO Bool
@@ -40,10 +42,13 @@ needUpdate = do
 
 parsing :: IO String
 parsing = do
-    filename <- getCollectionFilename
-    collectionData <- B.readFile $ mconcat ["collection/", filename]
-    let gamesList = getGamesList collectionData
-    getRandomElem gamesList
+    fileName <- getCollectionFilename
+    case fileName of
+        Nothing -> return "no data"
+        Just name -> do
+            collectionData <- B.readFile $ mconcat ["collection/", name]
+            let gamesList = getGamesList collectionData
+            getRandomElem gamesList
 
 
 getGamesList :: XmlSource s => s -> [String]
