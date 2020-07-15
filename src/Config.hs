@@ -6,6 +6,7 @@ import Configuration.Dotenv
 import Data.Char
 import Control.Error
 
+
 getConfigValue :: ConfigName -> IO (Either String String)
 getConfigValue name = loadFile defaultConfig >>= (return . f)
     where f config = note ("Missing field in config " ++ show name) $ Map.lookup (configTranslator name) $ Map.fromList config
@@ -16,6 +17,7 @@ data ConfigName = User
                 | Filename
                 | Port
     deriving Show
+
 
 configTranslator :: ConfigName -> String
 configTranslator configName = toLower <$> show configName
